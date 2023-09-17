@@ -15,16 +15,11 @@ func main() {
 	var CF_ZONE_NAME string = os.Getenv("CF_ZONE_NAME")
 	var CF_RECORD_NAME string = os.Getenv("CF_RECORD_NAME")
 	//获取本机公网ip
-	a, err := net.InterfaceAddrs()
+	//本机的公网ip
+	// fmt.Println(ipnet.IP.String())
+	ip, err := getPublicIpv4()
 	if err != nil {
 		panic(err)
-	}
-	var ip string //本机的公网ip
-	for _, addr := range a {
-		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && ipnet.IP.To4() != nil && ipnet.IP.IsGlobalUnicast() {
-			// fmt.Println(ipnet.IP.String())
-			ip = ipnet.IP.String()
-		}
 	}
 	api, err := cloudflare.New(CF_API_KEY, CF_API_EMAIL)
 	if err != nil {
@@ -69,4 +64,19 @@ func main() {
 		fmt.Printf("更新ipv4记录成功,当前ip:%s\n", dnsRecord.Content)
 	}
 
+}
+
+func getPublicIpv4() (string, error) {
+	a, err := net.InterfaceAddrs()
+	if err != nil {
+		return "", err
+	}
+
+	for _, addr := range a {
+		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && ipnet.IP.To4() != nil && ipnet.IP.IsGlobalUnicast() {
+
+			return ipnet.IP.String(), nil
+		}
+	}
+	return "", fmt.Errorf("not found ipv4")
 }
