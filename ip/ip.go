@@ -9,6 +9,11 @@ type GetIp interface {
 	GetPublicIp() (ipv4 string, ipv6 string, err error)
 }
 
+var _, testNet, _ = net.ParseCIDR("198.18.0.0/15")
+
+// https://en.wikipedia.org/wiki/IPv6_address#General_allocation
+var _, ipv6Unicast, _ = net.ParseCIDR("2000::/3")
+
 type LocalInterface struct {
 }
 
@@ -33,12 +38,17 @@ func (l LocalInterface) GetPublicIp() (ipv4 string, ipv6 string, err error) {
 			if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() &&
 				!ipnet.IP.IsPrivate() && ipnet.IP.IsGlobalUnicast() {
 				if ip := ipnet.IP.To4(); ip != nil {
-					ipv4s = append(ipv4s, ip)
+					if !testNet.Contains(ip) {
+						ipv4s = append(ipv4s, ip)
+					}
 				} else if ip := ipnet.IP.To16(); ip != nil {
 					//if ip[8]&0x40 == 0 {
 					//	continue
 					//}
-					ipv6s = append(ipv6s, ip)
+					if ipv6Unicast.Contains(ip) {
+
+						ipv6s = append(ipv6s, ip)
+					}
 				}
 			}
 		}
