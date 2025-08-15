@@ -4,9 +4,8 @@ go 1.24
 
 require (
 	github.com/caddyserver/caddy/v2 v2.10.0
+	github.com/cloudflare/cloudflare-go/v4 v4.6.0
 	github.com/libdns/libdns v1.1.0
-	github.com/sirupsen/logrus v1.9.3
-	github.com/zxspirit/cflibdns v0.1.0
 )
 
 require (
@@ -31,7 +30,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/cloudflare/circl v1.6.0 // indirect
-	github.com/cloudflare/cloudflare-go/v4 v4.6.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
 	github.com/dgraph-io/badger v1.6.2 // indirect
 	github.com/dgraph-io/badger/v2 v2.2007.4 // indirect
@@ -95,6 +93,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/slackhq/nebula v1.6.1 // indirect
 	github.com/smallstep/certificates v0.26.1 // indirect
 	github.com/smallstep/go-attestation v0.4.4-0.20240109183208-413678f90935 // indirect
