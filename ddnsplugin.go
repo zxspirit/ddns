@@ -48,6 +48,10 @@ func (d *DdnsPlugin) CaddyModule() caddy.ModuleInfo {
 	}
 }
 func (d *DdnsPlugin) UnmarshalCaddyfile(dispenser *caddyfile.Dispenser) error {
+	for dispenser.Next() {
+
+	}
+
 	//if !dispenser.Next() {
 	//	return fmt.Errorf("ddnsplugin: expected at least one argument")
 	//}

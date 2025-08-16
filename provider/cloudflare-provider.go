@@ -76,7 +76,8 @@ func (c *CloudflareProvider) getZoneCacheByName(name string) (*zoneCache, error)
 	c.mx.RLock()
 	defer c.mx.RUnlock()
 	for _, zone := range c.zoneCaches {
-		if zone.Name == name {
+		absoluteName := libdns.AbsoluteName(name, "")
+		if zone.Name == absoluteName {
 			return zone, nil
 		}
 	}
@@ -170,8 +171,11 @@ func (c *CloudflareProvider) AppendRecords(ctx context.Context, zone string, rec
 	}
 	res := make([]libdns.Record, 0, len(recs))
 	for _, input := range recs {
-		_, err := z.getRecord(input.RR().Name, input.RR().Type)
-		if err != nil {
+		name := input.RR().Name
+		name = libdns.AbsoluteName(name, z.Name)
+		_, err := z.getRecord(name, input.RR().Type)
+		if err == nil {
+			// Record already exists, skip it
 			continue
 		}
 		params, err := zoneCache2RecordNewParams(input)
